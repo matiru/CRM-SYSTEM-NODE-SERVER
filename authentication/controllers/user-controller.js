@@ -66,6 +66,33 @@ module.exports = {
             console.log(error)
         }
     },
+    
+
+
+    addCustomer: async (req, res) => {
+        const { name, phone_number, email, password, role,gender } = req.body;
+        let hash = await bcrypt.hash(password, 8)
+        console.log(hash)
+        try {
+            await pool.connect()
+            const data = await pool.request()
+                .input('name', name)
+                .input('phone_number', phone_number)
+                .input('email', email)
+                .input('role', role)
+                .input('password', hash)
+                .input('gender', gender)
+                .execute(`AddNewCustomer`)
+            console.log(data)
+            res.json(data.rowsAffected)
+        } catch (error) {
+            res.json(error.message)
+            console.log(error)
+        }
+    },
+
+ 
+        
 }
 
 
