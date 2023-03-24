@@ -90,7 +90,15 @@ module.exports = {
             console.log(error)
         }
     },
-
+    getAllEmployees: async (req, res) => {
+        try {
+            await pool.connect()
+            let data = await pool.request().execute(`GetEmployees`)
+            res.json(data.recordset)
+        } catch (error) {
+            console.log(error)
+        }
+    },
  
         
 }
