@@ -99,6 +99,16 @@ module.exports = {
             console.log(error)
         }
     },
+       
+    getAllCustomers: async (req, res) => {
+        try {
+            await pool.connect()
+            let data = await pool.request().execute(`GetCustomers`)
+            res.json(data.recordset)
+        } catch (error) {
+            console.log(error)
+        }}
+ 
  
         
 }
