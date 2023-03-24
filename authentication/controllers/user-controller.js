@@ -17,18 +17,21 @@ const loginSchema = Joi.object({
 module.exports = {  
     userLogin: async(req,res)=>{
         const validateLogin = createValidator(loginSchema);
+        console.log("first visited")
     
         try {
             const {email,password}= req.body;
-            awaitsql.connect(config);
-            await sql.query`select * from USERS where email = ${email}`;
+            await sql.connect(config);
+            
             const user = await sql.query`select * from USERS where email = ${email}`;
             if(user.recordset.length>0){
                 const validPassword = await bcrypt.compare(password,user.recordset[0].password);
-                if(!validPassword){
+                if(validPassword){
+                    res.json({message:'Login success'});
+                }
+                else{
                     res.json({message:'Invalid password'});
                 }
-                res.json({message:'Login success'});
             }else{
                 res.json({message:'User not found'});   
             }
