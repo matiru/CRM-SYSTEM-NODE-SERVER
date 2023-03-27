@@ -1,3 +1,110 @@
+CREATE PROCEDURE AddNewCustomer
+    @email VARCHAR(255),
+    @gender VARCHAR(10),
+    @phone_number VARCHAR(20),
+    @name VARCHAR(255)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    INSERT INTO USERS (email, role, is_employee, is_Active, gender, password, image_link, phone_number, name, created_at, loyalty_points)
+    VALUES (@email, 'customer', 0, 1, @gender, NULL, NULL, @phone_number, @name, GETDATE(), 0);
+    
+END
+GO
+
+
+CREATE PROCEDURE AddNewEmployee
+    @email VARCHAR(255),
+    @role VARCHAR(20),
+    @gender VARCHAR(10),
+    @password VARCHAR(255),
+    @phone_number VARCHAR(20),
+    @name VARCHAR(255)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    INSERT INTO USERS (email, role, is_employee, is_Active, gender, password, image_link, phone_number, name, created_at, loyalty_points)
+    VALUES (@email, @role, 1, 1, @gender, @password, NULL, @phone_number, @name, GETDATE(), NULL);
+    
+END
+GO
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE PROCEDURE UpdateCustomer
+@customer_id CHAR(4),
+@name varchar(255),
+@email varchar(255),
+@phone_number varchar(255)
+ AS
+BEGIN
+ UPDATE USERS
+  SET name = @name, 
+      email = @email, 
+      phone_number = @phone_number
+
+  WHERE id = @customer_id;
+END
+
+CREATE PROCEDURE UpdateCustomer
+@customer_id varchar(255),
+@name varchar(255),
+@email varchar(255),
+@phone_number varchar(255)
+AS
+BEGIN
+UPDATE USERS
+SET name = @name, email = @email, phone_number = @phone_number
+WHERE id = @customer_id
+END
+
+CREATE PROCEDURE UpdateEmployee
+@user_id CHAR(4),
+@name varchar(255),
+@phone_number varchar(255),
+@image_link varchar(255)
+AS
+BEGIN
+UPDATE USERS
+SET name = @name, phone_number = @phone_number, image_link = @image_link
+WHERE id = @user_id
+END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--3. Getting single user
+-- CREATE PROCEDURE get_single_users
+--   @email VARCHAR(255)
+-- AS
+-- BEGIN
+--   SELECT *
+--   FROM users
+--   WHERE email = @email
+-- END
+-- GO
+
 -- CREATE PROCEDURE GetEmployees
 -- AS
 -- BEGIN
@@ -19,11 +126,11 @@ EXEC GetEmployeeUsers;
 -- CREATE PROCEDURE GetCustomers
 -- AS
 -- BEGIN
--- SELECT u.id, u.name,u.gender, u.email, MAX(s.created_at) AS 'Last Purchase', COUNT(s.id) AS 'No Purchases Made'
+-- SELECT u.id, u.name,u.gender, u.email,u.loyalty_points, MAX(s.created_at) AS 'Last Purchase', COUNT(s.id) AS 'No Purchases Made'
 -- FROM USERS u
 -- LEFT JOIN SALES s ON s.customer_id = u.id
 -- WHERE u.is_employee = 0
--- GROUP BY u.id, u.name,u.email,u.gender;
+-- GROUP BY u.id, u.name,u.email,u.gender,u.loyalty_points;
 -- END;
 
 EXEC GetCustomers;
@@ -214,70 +321,6 @@ EXEC  get_new_users_today
 -- END
 EXEC  GetDailyRefundedSalesProducts
 
-
-
--- DROP PROCEDURE AddNewEmployee
--- CREATE PROCEDURE AddEmployee
---   @email VARCHAR(255),
---   @gender VARCHAR(10),
---   @password VARCHAR(255),
---   @image_link VARCHAR(255),
---   @phone_number VARCHAR(20),
---   @name VARCHAR(255)
--- AS
--- BEGIN
---   SET NOCOUNT ON;
-  
---   INSERT INTO USERS (email, role, is_employee, is_Active, gender, password, image_link, phone_number, name, created_at)
---   VALUES (@email, 'employee', 1, 1, @gender, @password, @image_link, @phone_number, @name, GETDATE());
-  
--- END
--- GO
-
--- CREATE PROCEDURE AddCustomer
---   @email VARCHAR(255),
---   @gender VARCHAR(10),
---   @phone_number VARCHAR(20),
---   @name VARCHAR(255)
--- AS
--- BEGIN
---   SET NOCOUNT ON;
-  
---   INSERT INTO USERS (email, role, is_employee, is_Active, gender, phone_number, name, created_at)
---   VALUES (@email, 'customer', 0, 1, @gender, @phone_number, @name, GETDATE());
-  
--- END
--- -- GO
-
--- CREATE PROCEDURE usp_EditEmployee
---     @id CHAR(4),
---     @name VARCHAR(255),
---     @phone_number VARCHAR(20),
---     @image_link VARCHAR(255),
---     @password VARCHAR(255)
--- AS
--- BEGIN
---     UPDATE USERS
---     SET name = @name,
---         phone_number = @phone_number,
---         image_link = @image_link,
---         password = @password
---     WHERE id = @id AND role = 'employee'
--- END
-
--- CREATE PROCEDURE usp_EditCustomer
---     @id CHAR(4),
---     @email VARCHAR(255),
---     @phone_number VARCHAR(20),
---     @name VARCHAR(255)
--- AS
--- BEGIN
---     UPDATE USERS
---     SET email = @email,
---         phone_number = @phone_number,
---         name = @name
---     WHERE id = @id AND role = 'customer'
--- END
 
 
 

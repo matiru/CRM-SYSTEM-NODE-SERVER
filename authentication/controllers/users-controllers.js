@@ -1,13 +1,33 @@
 const sql = require('mssql');
 const {config} = require('../sql-config');
-
+const bcrypt = require ('bcrypt');
+const { createToken } = require('../services/jwt-token.js');
 
 const pool = new sql.ConnectionPool(config);
 
 module.exports = {  
 
     
-
+  login: async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        await pool.connect()
+        let data = await pool.request()
+            .input('email', email)
+            .execute(`get_single_users`)
+        if (data.recordset.length) {
+            let user = data.recordset[0]
+            let dbPass = data.recordset[0].password
+            let result = await bcrypt.compare(password, dbPass)
+            let token = createToken({ email })
+            result ? res.json({ response: "Login successful", user, token }) : res.json({ response: "Check your credentials" })
+        } else {
+            res.status(400).json({ message: 'User not found!' })
+        }
+    } catch (error) {
+        res.status(500).json(error.message)
+    }
+},
     getAllEmployees: async (req, res) => {
         try {
             await pool.connect()
@@ -30,80 +50,82 @@ module.exports = {
         ,
         addEmployee: async (req, res) => {
             const { email, role, gender, password, phone_number, name } = req.body;
+            let hash = await bcrypt.hash(password,8)
             try {
-              const pool = await sql.connect(config);
-              await pool.request()
-                .input('email', sql.VarChar(255), email)
-                .input('role', sql.VarChar(255), role)
-                .input('gender', sql.VarChar(255), gender)
-                .input('password', sql.VarChar(255), password)
-                .input('phone_number', sql.VarChar(255), phone_number)
-                .input('name', sql.VarChar(255), name)
+              await  pool.connect()
+              const data = await pool.request()
+                .input('email', email)
+                .input('role', role)
+                .input('gender', gender)
+                .input('password', hash)
+                .input('phone_number', phone_number)
+                .input('name', name)
                 .execute('AddNewEmployee');
-              res.status(200).send({ message: 'Employee added successfully.' });
-            } catch (error) {
-              console.error(error);
-              res.status(500).send({ message: 'Error adding employee.' });
+                data.rowsAffected > 1 && res.status(200).json({ message: "Employee created succesfully" })
+        } catch (error) {
+            if (error.message.includes('Violation of UNIQUE KEY constraint')) {
+                res.json({ message: "User already exists" })
+            } else {
+                res.status(400).json(error.originalError['info'].message)
             }
-          }
+        }
+    }
           
           
 ,addCustomer: async (req, res) => {
     const { email, gender, phone_number, name } = req.body;
-  
     try {
-      const pool = await sql.connect(config);
-      await pool.request()
-      .input('email', sql.VarChar(255), email)
-              
-                .input('gender', sql.VarChar(255), gender)
-                .input('phone_number', sql.VarChar(255), phone_number)
-                .input('name', sql.VarChar(255), name)
-        .execute('AddNewCustomer');
-  
-      res.status(200).send({ message: 'Customer added successfully.' });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send({ message: 'Error adding customer.' });
+      await  pool.connect()
+      const data = await pool.request()
+      .input('email', email)           
+      .input('gender', gender)
+      .input('phone_number', phone_number)
+      .input('name', name)
+.execute('AddNewCustomer');
+        data.rowsAffected > 1 && res.status(200).json({ message: "Customer created succesfully" })
+} catch (error) {
+    if (error.message.includes('Violation of UNIQUE KEY constraint')) {
+        res.json({ message: "User already exists" })
+    } else {
+        res.status(400).json(error.originalError['info'].message)
     }
+}
+  
   }
 
 
   
  
   ,  updateCustomer:  async (req, res) => {
-    const { id } = req.params;
-    const { name, password, phone_number } = req.body;
+    let { id, name, email, phone_number } = req.body
     try {
-      const pool = await sql.connect(config);
-      await pool.request()
-    
-        .input('name', sql.VarChar(255), name)
-        .input('password ', sql.VarChar(255), password)
-        .input('phone_number', sql.VarChar(255), phone_number)
-        .execute('EditCustomer');
-      res.status(200).send({ message: 'Customer edited successfully.' });
+        await pool.connect()
+        let data = await pool.request()
+            .input('customer_id', id)
+            .input('name', name)
+            .input('email', email)
+            .input('phone_number', phone_number)
+            .execute(`UpdateCustomer`)
+        console.log(data)
+        data.rowsAffected.length > 0 ? res.status(200).json({ message: "Customer details updated successfully" }) : res.status(400).json({ message: "Request not completed try again later" })
     } catch (error) {
-      console.error(error);
-      res.status(500).send({ message: 'Error editing customer.' });
+        res.status(400).json(error.originalError['info'].message)
     }
-  },
+},
 updateEmployee: async (req, res) => {
-    const { id } = req.params;
-    const { name, password, phone_number, image_link } = req.body;
-    try {
-      const pool = await sql.connect(config);
-      await pool.request()
-        .input('name', sql.VarChar(255), name)
-        .input('password', sql.VarChar(255), password)
-        .input('phone_number', sql.VarChar(255), phone_number)
-        .input('image_link', sql.VarChar(255), image_link)
-        .execute('EditEmployee');
-      res.status(200).send({ message: 'Employee edited successfully.' });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send({ message: 'Error editing employee.' });
-    }
+  const { id, name, phone_number,image_link} = req.body
+  try {
+      await pool.connect()
+      let data = await pool.request()
+          .input('user_id', id)
+          .input('name', name)
+          .input('phone_number', phone_number)
+          .input('image_link',image_link)
+          .execute(`UpdateEmployee`)
+      data.rowsAffected.length > 0 ? res.status(200).json({ message: "User details updated successfully" }) : res.status(500).json({ message: "Request not completed try again later" })
+  } catch (error) {
+      res.status(400).json(error.originalError['info'].message)
+  }
 }
 
  ,

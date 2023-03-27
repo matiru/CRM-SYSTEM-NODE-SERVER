@@ -5,6 +5,7 @@ CREATE DATABASE crm_system;
 USE crm_system;
 GO
 
+select * from users
 DROP TABLE USERS
 CREATE TABLE USERS (
   id CHAR(4) PRIMARY KEY DEFAULT SUBSTRING(CONVERT(VARCHAR(40), NEWID()), 1, 4),
@@ -17,7 +18,8 @@ CREATE TABLE USERS (
   image_link VARCHAR(255),
   phone_number VARCHAR(20),
   name VARCHAR(255),
-  created_at DATETIME
+  created_at DATETIME,
+  loyalty_points BIGINT,
 );
 go
 
