@@ -12,7 +12,7 @@ userRouter.post('/addcustomer', addCustomer);
 userRouter.put('/editemployee/:id', updateEmployee);
 userRouter.put('/editcustomer/:id', updateCustomer);
 userRouter.get('/:id', getUserById);
-
+ 
 
 
 
