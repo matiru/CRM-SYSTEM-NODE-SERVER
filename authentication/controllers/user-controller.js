@@ -16,8 +16,7 @@ const loginSchema = Joi.object({
 
 module.exports = {  
     userLogin: async(req,res)=>{
-        const validateLogin = createValidator(loginSchema);
-        console.log("first visited")
+     
     
         try {
             const {email,password}= req.body;
@@ -46,9 +45,9 @@ module.exports = {
     },
 
     addEmployee: async (req, res) => {
+        console.log('hash')
         const { name, phone_number, email, password, role,gender } = req.body;
         let hash = await bcrypt.hash(password, 8)
-        console.log(hash)
         try {
             await pool.connect()
             const data = await pool.request()

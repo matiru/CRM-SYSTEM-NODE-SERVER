@@ -1,17 +1,21 @@
 
 const userRouter = require('express').Router();
 
-const {SchemaValidateMiddleware} = require('../middlewares/schema-validate');
-const {signupSchema,loginSchema} = require('../services/joi-services');
+const { getAllEmployees,getAllCustomers , addEmployee,updateEmployee,addCustomer,
+    addUser, getUserById, updateCustomer} = require('../controllers/users-controllers');
 
-const {
-    userLogin,
 
-} = require('../controllers/user-controller');
+userRouter.get('/employees',getAllEmployees);
+userRouter.get('/customers',getAllCustomers);
+userRouter.post('/addemployee', addEmployee);
+userRouter.post('/addcustomer', addCustomer);
+userRouter.put('/editemployee/:id', updateEmployee);
+userRouter.put('/editcustomer/:id', updateCustomer);
+userRouter.get('/:id', getUserById);
 
-userRouter.post('/login',(req,res,next) =>SchemaValidateMiddleware(req,res,next,loginSchema),userLogin);
-userRouter.post('/signup',(req,res,next) =>SchemaValidateMiddleware(req,res,next,signupSchema),userSignup);
-userRouter.get('/getAllCustomers',getAllCustomers);
+
+
+
 
 
 module.exports = userRouter;

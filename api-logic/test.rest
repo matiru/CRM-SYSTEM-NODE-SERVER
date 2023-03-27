@@ -1,0 +1,57 @@
+###
+GET http://localhost:6000
+
+###
+GET http://localhost:6000/sales
+
+###
+POST http://localhost:6000/sales/makesale
+Content-Type: application/json
+
+{
+  "payment_method": "Credit Card",
+  "customer_id": "0C2C",
+  "employee_id": "2467",
+  "products": [
+    { "id": "1135A563", "quantity": 2, "price": 899.99 },
+    { "id": "2E032182", "quantity": 1, "price": 999.99}
+  ]
+}
+
+
+###
+GET http://localhost:6000/products
+
+###
+GET http://localhost:6000/products/categories
+###
+POST http://localhost:6000/products/addproduct
+Content-Type: application/json
+
+{
+    "quantity": 50,
+    "description": "This is a car",
+    "name": "bmw",
+    "category": "cars",
+    "status": "approved",
+    "price": 111149.99
+}
+
+
+###
+PUT  http://localhost:6000/products/editproduct
+Content-Type: application/json
+
+{
+    "productId": "EA10ABD8",
+    "quantity": 150,
+    "description": "This is a bmw",
+    "name": "bmw",
+    "category": "cars",
+    "status": "pending",
+    "price": 3000000.99
+}
+
+
+###
+GET http://localhost:6000/products/EA10ABD8

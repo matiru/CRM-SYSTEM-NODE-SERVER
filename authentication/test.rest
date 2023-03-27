@@ -1,0 +1,93 @@
+###
+GET http://localhost:5000/users/employees
+###
+GET http://localhost:5000/users/6FC4
+
+###
+GET http://localhost:5000/users/customers
+
+
+###
+POST http://localhost:5000/users/addcustomer
+Content-Type: application/json
+
+{
+  "email": "gemmatiru@gmail.com",
+  "gender": "male",
+  "phone_number": "+2468013579",
+  "name": "GEM matiru"
+}
+
+###
+POST http://localhost:5000/users/addemployee
+Content-Type: application/json
+
+{
+  "email": "john@eple.com",
+  "role": "superAdmin",
+  "gender": "male",
+  "password": "password123",
+  "phone_number": "+12345890",
+  "name": "John Moe"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ###
+# POST http://localhost:5000/users/login
+
+# Content-Type: application/json
+
+# {
+#     "email": "bobsmith@example.com",
+#     "password": "password789"
+# }
+
+###
+
+# PUT http://localhost:5000/users/editcustomer/A589
+# Content-Type: application/json
+
+# {
+#   "email": "johndoe@example.com",
+#   "phone_number": "+1 123 456 7890",
+#   "name": "John Doe"
+# }
+
+
+# ###
+# PUT http://localhost:5000/users/editemployee/2467
+# Content-Type: application/json
+
+# {
+#   "id":
+#   "phone_number": " 1 123 456 7890",
+#   "name": "Jane Doe",
+#   "password": "newpassword",
+#   "image_link": "https://example.com/image.jpg"
+# }
+
+
+
+
+
+

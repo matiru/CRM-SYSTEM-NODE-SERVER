@@ -7,11 +7,14 @@
 -- WHERE u.is_employee = 1
 -- GROUP BY u.id, u.name, u.email, u.gender, u.is_Active, u.created_at;
 -- END;
-
 EXEC GetEmployees;
--- DROP PROCEDURE IF EXISTS GetCustomers;
 
-
+-- CREATE PROCEDURE GetEmployeeUsers
+-- AS
+-- BEGIN
+--     SELECT * FROM USERS WHERE is_employee = 1
+-- END
+EXEC GetEmployeeUsers;
 
 -- CREATE PROCEDURE GetCustomers
 -- AS
@@ -22,11 +25,9 @@ EXEC GetEmployees;
 -- WHERE u.is_employee = 0
 -- GROUP BY u.id, u.name,u.email,u.gender;
 -- END;
+
 EXEC GetCustomers;
 
-
-
--- -- Procedure to retrieve product information
 -- CREATE PROCEDURE GetProducts
 -- AS
 -- BEGIN
@@ -34,10 +35,6 @@ EXEC GetCustomers;
 -- FROM PRODUCTS;
 -- END;
 EXEC GetProducts;
-
-
--- DROP PROCEDURE IF EXISTS GetSaleInfo;
--- Procedure to retrieve sales information
 
 -- CREATE PROCEDURE GetSalesInformation
 -- @customerId CHAR(4) = NULL,
@@ -57,6 +54,80 @@ EXEC GetProducts;
 -- GROUP BY s.id, s.created_at, c.name, e.name, s.total_amount, s.state;
 -- END;
 EXEC GetSalesInformation;
+
+
+-- CREATE PROCEDURE MakeSale
+--   @payment_method VARCHAR(255),
+--   @customer_id CHAR(8),
+--   @employee_id CHAR(8),
+--   @products_json NVARCHAR(MAX)
+-- AS
+-- BEGIN
+--   SET NOCOUNT ON;
+
+--   DECLARE @sale_id CHAR(8)
+--   SET @sale_id = SUBSTRING(CONVERT(VARCHAR(40), NEWID()), 1, 8)
+
+--   DECLARE @total_amount FLOAT
+--   SET @total_amount = 0
+
+--   BEGIN TRANSACTION
+
+--   INSERT INTO SALES (id, payment_method, customer_id, employee_id, created_at, updated_at, state, total_amount, payment_status)
+--   VALUES (@sale_id, @payment_method, @customer_id, @employee_id, GETDATE(), GETDATE(), 'completed', @total_amount, 'paid')
+
+--   DECLARE @product_id CHAR(8)
+--   DECLARE @product_price FLOAT
+--   DECLARE @product_quantity INT
+--   DECLARE @product_total FLOAT
+--   DECLARE @product_status CHAR(8)
+
+--   DECLARE @json NVARCHAR(MAX) = @products_json
+--   DECLARE @table TABLE (product_id CHAR(8), product_price FLOAT, product_quantity INT)
+
+--   INSERT INTO @table
+--   SELECT product_id, price, quantity
+--   FROM OPENJSON(@json)
+--   WITH (
+--     product_id CHAR(8),
+--     price FLOAT,
+--     quantity INT
+--   )
+
+--   DECLARE product_cursor CURSOR FOR
+--   SELECT product_id, product_price, product_quantity
+--   FROM @table
+
+--   OPEN product_cursor
+
+--   FETCH NEXT FROM product_cursor INTO @product_id, @product_price, @product_quantity
+
+--   WHILE @@FETCH_STATUS = 0
+--   BEGIN
+--     SET @product_total = @product_price * @product_quantity
+--     SET @product_status = 'sold'
+--     SET @total_amount = @total_amount + @product_total
+
+--     INSERT INTO SALE_PRODUCTS (id, sale_id, product_id, status, price, created_at)
+--     VALUES (SUBSTRING(CONVERT(VARCHAR(40), NEWID()), 1, 8), @sale_id, @product_id, @product_status, @product_price, GETDATE())
+
+--     FETCH NEXT FROM product_cursor INTO @product_id, @product_price, @product_quantity
+--   END
+
+--   CLOSE product_cursor
+--   DEALLOCATE product_cursor
+
+--   UPDATE SALES
+--   SET total_amount = @total_amount, updated_at = GETDATE()
+--   WHERE id = @sale_id
+
+--   COMMIT TRANSACTION
+
+--   SELECT * FROM SALES WHERE id = @sale_id
+
+-- END
+
+
 
 
 
@@ -125,9 +196,6 @@ EXEC GetSalesInformation;
 --     SELECT @new_users_today AS 'New Users Today', @percentage_difference AS 'Percentage Difference'
 -- END
 EXEC  get_new_users_today
--- DROP PROCEDURE IF EXISTS GetDailyRefundedSalesProducts;
-
-
 
 -- CREATE PROCEDURE GetDailyRefundedSalesProducts
 -- AS
@@ -144,123 +212,174 @@ EXEC  get_new_users_today
 
 --     SELECT @today_refunded AS 'Today''s Refunded Sales Products', @percent_change AS '% Change Compared to Yesterday'
 -- END
+EXEC  GetDailyRefundedSalesProducts
 
 
 
+-- DROP PROCEDURE AddNewEmployee
+-- CREATE PROCEDURE AddEmployee
+--   @email VARCHAR(255),
+--   @gender VARCHAR(10),
+--   @password VARCHAR(255),
+--   @image_link VARCHAR(255),
+--   @phone_number VARCHAR(20),
+--   @name VARCHAR(255)
+-- AS
+-- BEGIN
+--   SET NOCOUNT ON;
+  
+--   INSERT INTO USERS (email, role, is_employee, is_Active, gender, password, image_link, phone_number, name, created_at)
+--   VALUES (@email, 'employee', 1, 1, @gender, @password, @image_link, @phone_number, @name, GETDATE());
+  
+-- END
+-- GO
 
+-- CREATE PROCEDURE AddCustomer
+--   @email VARCHAR(255),
+--   @gender VARCHAR(10),
+--   @phone_number VARCHAR(20),
+--   @name VARCHAR(255)
+-- AS
+-- BEGIN
+--   SET NOCOUNT ON;
+  
+--   INSERT INTO USERS (email, role, is_employee, is_Active, gender, phone_number, name, created_at)
+--   VALUES (@email, 'customer', 0, 1, @gender, @phone_number, @name, GETDATE());
+  
+-- END
+-- -- GO
 
-
---  CREATE PROCEDURE AddNewEmployee
---     @email VARCHAR(255),
---     @password VARCHAR(255),
---     @gender VARCHAR(10),
+-- CREATE PROCEDURE usp_EditEmployee
+--     @id CHAR(4),
+--     @name VARCHAR(255),
+--     @phone_number VARCHAR(20),
 --     @image_link VARCHAR(255),
---     @phone_number VARCHAR(20),
---     @name VARCHAR(255)
+--     @password VARCHAR(255)
 -- AS
 -- BEGIN
---     SET NOCOUNT ON;
-
---     INSERT INTO USERS (
---         email,
---         role,
---         is_employee,
---         is_active,
---         gender,
---         password,
---         image_link,
---         phone_number,
---         name,
---         created_at
---     )
---     VALUES (
---         @email,
---         'employee',
---         1,
---         1,
---         @gender,
---         @password,
---         @image_link,
---         @phone_number,
---         @name,
---         GETDATE()
---     )
+--     UPDATE USERS
+--     SET name = @name,
+--         phone_number = @phone_number,
+--         image_link = @image_link,
+--         password = @password
+--     WHERE id = @id AND role = 'employee'
 -- END
 
-
-
-
--- CREATE PROCEDURE AddNewCustomer
+-- CREATE PROCEDURE usp_EditCustomer
+--     @id CHAR(4),
 --     @email VARCHAR(255),
---     @gender VARCHAR(10),
 --     @phone_number VARCHAR(20),
 --     @name VARCHAR(255)
 -- AS
 -- BEGIN
---     SET NOCOUNT ON;
-
---     INSERT INTO USERS (
---         email,
---         role,
---         is_employee,
---         is_active,
---         gender,
---         phone_number,
---         name,
---         created_at
---     )
---     VALUES (
---         @email,
---         'customer',
---         0,
---         1,
---         @gender,
---         @phone_number,
---         @name,
---         GETDATE()
---     )
+--     UPDATE USERS
+--     SET email = @email,
+--         phone_number = @phone_number,
+--         name = @name
+--     WHERE id = @id AND role = 'customer'
 -- END
 
 
 
--- CREATE PROCEDURE AddNewProduct
---     @sale_id CHAR(8),
---     @product_id CHAR(8),
---     @status CHAR(8),
---     @price FLOAT
+
+
+-- CREATE PROCEDURE GetUserById
+--     @userId CHAR(4)
 -- AS
 -- BEGIN
 --     SET NOCOUNT ON;
-
---     INSERT INTO SALE_PRODUCTS (
---         sale_id,
---         product_id,
---         status,
---         price,
---         created_at
---     )
---     VALUES (
---         @sale_id,
---         @product_id,
---         @status,
---         @price,
---         GETDATE()
---     )
+--     SELECT * FROM USERS WHERE id = @userId;
 -- END
 
 
--- CREATE PROCEDURE UpdateProductDetails
---     @id CHAR(8),
---     @status CHAR(8) = NULL,
---     @price FLOAT = NULL
+--   EXEC ;
+
+
+
+
+-- CREATE PROCEDURE GetProductById
+--   @productId CHAR(8)
 -- AS
 -- BEGIN
---     SET NOCOUNT ON;
-
---     UPDATE SALE_PRODUCTS
---     SET
---         status = ISNULL(@status, status),
---         price = ISNULL(@price, price)
---     WHERE
---         id = @id
+--   SELECT * FROM PRODUCTS WHERE id = @productId;GetProductById
 -- END
+
+
+=
+-- DROP PROCEDURE IF EXISTS  GetAllCategories;
+
+-- CREATE PROCEDURE GetAllCategories
+-- AS
+-- BEGIN
+--   SELECT DISTINCT category FROM PRODUCTS;
+-- END
+
+ EXEC GetAllCategories
+
+
+-- CREATE PROCEDURE AddProduct
+-- @quantity INT,
+-- @description TEXT,
+-- @name VARCHAR(255),
+-- @category VARCHAR(255),
+-- @status VARCHAR(20),
+-- @price FLOAT
+-- AS
+-- BEGIN
+-- INSERT INTO PRODUCTS (quantity, description, name, category, status, price, created_at, updated_at)
+-- VALUES (@quantity, @description, @name, @category, @status, @price, GETDATE(), GETDATE());
+-- END
+EXEC AddProduct
+
+-- CREATE PROCEDURE UpdateProductById
+--   @id CHAR(8),
+--   @quantity INT,
+--   @description TEXT,
+--   @name VARCHAR(255),
+--   @category VARCHAR(255),
+--   @status VARCHAR(20),
+--   @price FLOAT
+-- AS
+-- BEGIN
+--   UPDATE PRODUCTS 
+--   SET quantity = @quantity, 
+--       description = @description, 
+--       name = @name, 
+--       category = @category, 
+--       status = @status, 
+--       price = @price, 
+--       updated_at = GETDATE() 
+--   WHERE id = @id;
+-- END
+
+
+
+
+
+
+
+-- CREATE PROCEDURE UpdateProduct
+--   @productId CHAR(8),
+--   @quantity INT,
+--   @description TEXT,
+--   @name VARCHAR(255),
+--   @category VARCHAR(255),
+--   @status VARCHAR(20),
+--   @price FLOAT
+-- AS
+-- BEGIN
+--   UPDATE PRODUCTS 
+--   SET quantity = @quantity, 
+--       description = @description, 
+--       name = @name, 
+--       category = @category, 
+--       status = @status, 
+--       price = @price, 
+--       updated_at = GETDATE() 
+--   WHERE id = @productId;
+-- END
+
+EXEC UpdateProduct '5483C01E', @quantity = 20, @description = 'New description', @name = 'New name', @category = 'sports', @status = 'New status', @price = 9.99;
+
+
+
