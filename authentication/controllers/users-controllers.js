@@ -97,7 +97,8 @@ module.exports = {
   
  
   ,  updateCustomer:  async (req, res) => {
-    let { id, name, email, phone_number } = req.body
+    let {  name, email, phone_number } = req.body
+    let {id} = req.params
     try {
         await pool.connect()
         let data = await pool.request()
@@ -106,14 +107,14 @@ module.exports = {
             .input('email', email)
             .input('phone_number', phone_number)
             .execute(`UpdateCustomer`)
-        console.log(data)
-        data.rowsAffected.length > 0 ? res.status(200).json({ message: "Customer details updated successfully" }) : res.status(400).json({ message: "Request not completed try again later" })
+        data.rowsAffected >= 1 ? res.status(200).json({ message: "Customer details updated successfully" }) : res.status(400).json({ message: "Request not completed try again later" })
     } catch (error) {
         res.status(400).json(error.originalError['info'].message)
     }
 },
 updateEmployee: async (req, res) => {
-  const { id, name, phone_number,image_link} = req.body
+  const {  name, phone_number,image_link} = req.body
+  let {id} = req.params
   try {
       await pool.connect()
       let data = await pool.request()

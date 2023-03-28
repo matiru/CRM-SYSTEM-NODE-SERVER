@@ -1,20 +1,20 @@
 ###
 GET http://localhost:5000/users/employees
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXBsZS5jb20iLCJpYXQiOjE2Nzk5NTcwODUsImV4cCI6MTY3OTk3ODY4NX0.4edoPsu7Jf6Iu_CXLWTjcWlsWc7yxkz1KkBJobI9ALE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Implc3NzaWVAZXBsZS5jb20iLCJpYXQiOjE2Nzk5ODU1NjQsImV4cCI6MTY4MDIwMTU2NH0.xvQeQ_yGHa4UsliQP9l4XWcmtI8ReRZQLn4T1XaNZXk
 ###
-GET http://localhost:5000/users/71E8
+GET http://localhost:5000/users/D26A
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXBsZS5jb20iLCJpYXQiOjE2Nzk5NTcwODUsImV4cCI6MTY3OTk3ODY4NX0.4edoPsu7Jf6Iu_CXLWTjcWlsWc7yxkz1KkBJobI9ALE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Implc3NzaWVAZXBsZS5jb20iLCJpYXQiOjE2Nzk5ODU1NjQsImV4cCI6MTY4MDIwMTU2NH0.xvQeQ_yGHa4UsliQP9l4XWcmtI8ReRZQLn4T1XaNZXk
 
 ###
 GET http://localhost:5000/users/customers
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXBsZS5jb20iLCJpYXQiOjE2Nzk5NTcwODUsImV4cCI6MTY3OTk3ODY4NX0.4edoPsu7Jf6Iu_CXLWTjcWlsWc7yxkz1KkBJobI9ALE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Implc3NzaWVAZXBsZS5jb20iLCJpYXQiOjE2Nzk5ODU1NjQsImV4cCI6MTY4MDIwMTU2NH0.xvQeQ_yGHa4UsliQP9l4XWcmtI8ReRZQLn4T1XaNZXk
 ###
 POST http://localhost:5000/users/addcustomer
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXBsZS5jb20iLCJpYXQiOjE2Nzk5NTcwODUsImV4cCI6MTY3OTk3ODY4NX0.4edoPsu7Jf6Iu_CXLWTjcWlsWc7yxkz1KkBJobI9ALE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Implc3NzaWVAZXBsZS5jb20iLCJpYXQiOjE2Nzk5ODU1NjQsImV4cCI6MTY4MDIwMTU2NH0.xvQeQ_yGHa4UsliQP9l4XWcmtI8ReRZQLn4T1XaNZXk
 
 {
   "email": "gemmatiru@gmail.com",
@@ -28,7 +28,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZ
 
 POST http://localhost:5000/users/addemployee
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXBsZS5jb20iLCJpYXQiOjE2Nzk5NTcwODUsImV4cCI6MTY3OTk3ODY4NX0.4edoPsu7Jf6Iu_CXLWTjcWlsWc7yxkz1KkBJobI9ALE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Implc3NzaWVAZXBsZS5jb20iLCJpYXQiOjE2Nzk5ODU1NjQsImV4cCI6MTY4MDIwMTU2NH0.xvQeQ_yGHa4UsliQP9l4XWcmtI8ReRZQLn4T1XaNZXk
 
 {
   "email": "jesssie@eple.com",
@@ -69,7 +69,7 @@ Content-Type: application/json
 
  PUT http://localhost:5000/users/editcustomer/71E8
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXBsZS5jb20iLCJpYXQiOjE2Nzk5NTcwODUsImV4cCI6MTY3OTk3ODY4NX0.4edoPsu7Jf6Iu_CXLWTjcWlsWc7yxkz1KkBJobI9ALE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Implc3NzaWVAZXBsZS5jb20iLCJpYXQiOjE2Nzk5ODU1NjQsImV4cCI6MTY4MDIwMTU2NH0.xvQeQ_yGHa4UsliQP9l4XWcmtI8ReRZQLn4T1XaNZXk
 
 
 {
@@ -78,13 +78,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZ
   "name": "gem kagwa"
   
   
+  
 }
 
 
 ###
 PUT http://localhost:5000/users/editemployee/D26A
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZXBsZS5jb20iLCJpYXQiOjE2Nzk5NTcwODUsImV4cCI6MTY3OTk3ODY4NX0.4edoPsu7Jf6Iu_CXLWTjcWlsWc7yxkz1KkBJobI9ALE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Implc3NzaWVAZXBsZS5jb20iLCJpYXQiOjE2Nzk5ODU1NjQsImV4cCI6MTY4MDIwMTU2NH0.xvQeQ_yGHa4UsliQP9l4XWcmtI8ReRZQLn4T1XaNZXk
 
 
 {

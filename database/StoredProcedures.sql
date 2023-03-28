@@ -57,17 +57,7 @@ BEGIN
   WHERE id = @customer_id;
 END
 
-CREATE PROCEDURE UpdateCustomer
-@customer_id varchar(255),
-@name varchar(255),
-@email varchar(255),
-@phone_number varchar(255)
-AS
-BEGIN
-UPDATE USERS
-SET name = @name, email = @email, phone_number = @phone_number
-WHERE id = @customer_id
-END
+
 
 CREATE PROCEDURE UpdateEmployee
 @user_id CHAR(4),
